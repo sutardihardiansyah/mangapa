@@ -1,65 +1,59 @@
 import { useEffect, useState } from 'react'
+import { useParams } from "react-router-dom"
 import axios from 'axios'
 import { Link } from 'react-router-dom';
 
 const Manga = () => {
+    const {page} = useParams()
+    console.log(page);
+    const oldUrl = "http://localhost:3000/manga";
+    let url = page ? oldUrl+'/page/' +page : oldUrl;
     const [next, setNext] = useState("");
-    const [last, setLast] = useState("");
-    const [first, setFirst] = useState("");
-    const [mangas, setMangas] = useState([]);
     const [mangaList, setMangaList] = useState([]);
+
+    const getData = async (link = url) => {
+        const response = await axios.get(link);
+        setMangaList(response.data.manga_list)
+        setNext(response.data.next);
+    }
+
     useEffect(() => {
-        const getData = async (link = "https://guarded-mountain-68231.herokuapp.com/manga") => {
-        const response = await axios.get(link);
-            console.log(response.data)
-            setMangaList(response.data.manga_list)
-        }
+        window.scrollTo(0, 0);
         getData()
-        getPhotos()
-        getManga()
-        
-    }, [])
+    }, [page])
     
+    return (
+        <div className="pt-24">
+            <div className="container px-4 mx-auto">
 
-    const getManga = async (link = "https://kitsu.io/api/edge/manga") => {
-        const response = await axios.get(link);
-        setFirst(response.data.links.first);
-        setNext(response.data.links.next);
-        setLast(response.data.links.last);
-        setMangas(response.data.data);
-    }
-    const getPhotos =  async () => {
-        const response = await axios.get("https://api.unsplash.com/photos/?client_id=ZY-4Gkq1JSQyp-UPJtTv30dqL1MASC1qFvJKA75kAmc");
-    }
+                <div className="grid grid-cols-12">
 
-    const firstPage =  async (link) => {
-        getManga(link)
-    }
-    const nextPage =  async (link) => {
-        getManga(link)
-    }
-    const lastPage =  async (link) => {
-        getManga(link)
-    }
-  return (
-    <div className="pt-24">
-        <h1>Manga</h1>
-        
-        <div className="grid grid-cols-5 gap-2">
-            { mangas.map( (manga, i) => (
-                <Link to={`/detail-manga/${manga.id}`} key={i}>
-                    <div className="bg-blue-300">
-                        <img src={manga.attributes.posterImage.medium} alt="Thumb Img" />
-                        <h6>{ manga.attributes.canonicalTitle }</h6>
+                    <div className="col-span-8">
+                        <div className="grid grid-cols-4">
+                            {
+                                mangaList.map( (manga, i) => (
+                                    <a href="#" className="h-[330px] w-[180px] group relative" key={i}>
+                                        {/* <a href={`/manga/detail/${manga.endpoint}`}>Detail</a>
+                                        <p>{ manga.title }</p> */}
+                                        <img src={`${manga.thumb}`} alt="" className="w-full" />
+                                        <div className="absolute bottom-16 inset-x-0 bg-black opacity-80 shadow-xl w-full">
+                                            <h5 className="text-white transition-all duration-500 group-hover:-translate-y-5">{ manga.title }</h5>
+                                        </div>
+                                        <Link className="text-white" to={`/manga/chapter/${manga.chapter_endpoint}`}>
+                                            { manga.chapter }
+                                        </Link>
+                                    </a>
+                                ))
+                            }
+
+                        </div>
+
                     </div>
-                </Link>
-            ) ) }
+                </div>
+                <Link to={`/page/${next}`} className="bg-blue-600 text-white px-4 py-1 rounded-sm shadow-lg">Next</Link>
+            </div>
         </div>
-        <button onClick={ () => firstPage(first)} className="bg-blue-600 px-4 py-1 mb-10 mt-5 text-white shadow rounded-sm mr-2">First</button>
-        <button onClick={ () => nextPage(next)} className="bg-blue-600 px-4 py-1 mb-10 mt-5 text-white shadow rounded-sm mr-2">Next</button>
-        <button onClick={ () => lastPage(last)} className="bg-blue-600 px-4 py-1 mb-10 mt-5 text-white shadow rounded-sm">Last</button>
-    </div>
-  )
+    )
 }
 
 export default Manga
