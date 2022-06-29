@@ -4,7 +4,20 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    screens: {
+      'xs'  : '240px',
+      '2sm'  : '500px',
+      'sm'  : '640px',
+      'md'  : '768px',
+      'lg'  : '1024px',
+      'xl'  : '1280px',
+      '2xl' : '1536px'
+    },
+    extend: {
+      fontFamily : {
+        fontAwesome : ['Font Awesome 5 Free']
+      }
+    },
   },
   plugins: [],
 }

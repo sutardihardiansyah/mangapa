@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @import url(//db.onlinewebfonts.com/c/061b39e95e1a0bd25e8d294af8596b2a?family=Font+Awesome+5+Free); */
 
 body {
   /* margin: 0; */
@@ -9,6 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background : #0b0c2a;
 }
 
 code {
@@ -18,4 +20,73 @@ code {
 
 .hamburger-line {
   @apply h-[2px] w-[30px] my-2 block bg-black
+}
+
+.manga-title {
+  background: linear-gradient(0deg,#000 30%,transparent);
+}
+
+.rating-container {
+  position: relative;
+  overflow: hidden;
+  color: #ffc700;
+  height: 15px;
+  line-height: 1;
+  width: 85px;
+  font-size: 15px;
+  margin: 0 auto;
+}
+
+.rating-container:before {
+  content: "\f005\f005\f005\f005\f005";
+  font-family: "Font Awesome 5 Free";
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #686868;
+  height: 15px;
+}
+
+.rating-container span {
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  position: absolute;
+  padding-top: 15px;
+
+}
+.rating-container span:before {
+  content: "\f005\f005\f005\f005\f005";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  top: 0;
+  position: absolute;
+  left: 0;
+
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    /* background: #f7f4ed; */
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #15157a;
+    border-radius: 100vh;
+    /* border: 3px solid #f6f7ed; */
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #15157a;
+  }
+}
+
+.manga-info {
+  
 }
