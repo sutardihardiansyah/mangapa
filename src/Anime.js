@@ -3,11 +3,13 @@ import { Link } from "react-router-dom"
 import anime from './apis/anime'
 
 const Anime = () => {
+    const [isLoading, setIsLoading] = useState(true)
     const [animeLatest, setAnimeLatest] = useState([])
     const getAnime = async () => {
         const response = await anime.get("/anime");
         console.log(response.data.latest.data)
         setAnimeLatest(response.data.latest.data);
+        setIsLoading(false)
     }
     useEffect( () => {
         getAnime()
@@ -15,42 +17,25 @@ const Anime = () => {
     return (
         <div className="pt-24 pb-7">
             <div className="container px-4 mx-auto">
-                
-                <div className="grid grid-cols-12 mb-10">
-
-                    <div className="col-span-8">
-                        <div className="grid grid-cols-1 2sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-4 2sm:gap-x-36 gap-y-24 sm:gap-x-52 md:gap-y-44 lg:gap-y-20">
+                <div className="flex flex-wrap">
+                    <div className="flex-[0_0_100%] 2lg:flex-[0_0_66.666667%]">
+                        <div className="flex flex-wrap">
                             {
+                                isLoading ? 
+                                <div className="text-4xl text-white">LOADING..........</div>
+                                :
                                 animeLatest.map( (anime, i) => (
-                                        <>
-                                        <div className="w-[161px] h-[325px] xs:w-[193px] sm:w-[240px] md:w-80 lg:w-60">
-                                            <Link to={`/anime/detail/${anime.endpoint}`} className="group relative block" title={anime.title} key={i}>
-                                                <img src={`${anime.thumb}`} alt="" className="w-full rounded-md" />
-                                                <div className="absolute bottom-0 w-full h-16 manga-title transition-all duration-500 group-hover:h-24">
-                                                    <h4 className="text-white overflow-ellipsis overflow-hidden whitespace-nowrap font-bold">{ anime.title }</h4>
-                                                </div>
-                                            </Link>
-
-                                            {/* <Link className="text-white block rounded-bl-md rounded-br-md bg-black h-[80px] border-t-2 border-white hover:bg-sky-700" to={`/manga/chapter/${anime.chapter_endpoint}`}>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="">#{anime.chapter_number}</span>
-                                                    <span className="text-right">{anime.updated_on}</span>
-
-                                                </div>
-                                                <p className="text-gray-200 mt-3">{ anime.chapter }</p>
-                                            </Link> */}
-                                        </div>
-                                        </>
-                                       
-                                    
-                                ))
+                                    <Link to={`/anime/detail/${anime.endpoint}`} key={i} className="flex-[0_0_100%] 2sm:flex-[0_0_50%] 2lg:flex-[0_0_33.333333%] px-4 mb-4 group">
+                                        <div className="h-[325px] rounded-md group-hover:scale-105 transition-all duration-300" style={{ background: `url(${anime.thumb})`, backgroundRepeat: "no-repeat", backgroundSize: 'cover' }}></div>
+                                    </Link>
+                                ) )
                             }
-
+                            
                         </div>
-
                     </div>
-                    <div className="col-span-8">
-                        
+                    <div className="flex-[0_0_100%] 2lg:flex-[0_0_33.333333%] lg:flex-[0_0_33.333333%] md:flex-[0_0_50%]sm:flex-[0_0_66.666667%]">
+                        <div className="bg-red-500 h-44 w-full"></div>
+                        <div className="bg-red-500 h-44 w-full"></div>
                     </div>
                 </div>
                 
