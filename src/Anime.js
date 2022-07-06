@@ -27,9 +27,25 @@ const Anime = () => {
                                 <div className="text-4xl text-white">LOADING..........</div>
                                 :
                                 animeLatest.map( (anime, i) => (
-                                    <Link to={`/anime/detail/${anime.endpoint}`} key={i} className="flex-[0_0_100%] 2sm:flex-[0_0_50%] 2lg:flex-[0_0_33.333333%] px-4 mb-4 group">
-                                        <div className="anime-thumb h-[325px] rounded-md bg-no-repeat bg-cover bg-top transition-all duration-300" style={{ backgroundImage: `url(${anime.thumb})`}}></div>
-                                    </Link>
+                                    <div className="flex-[0_0_100%] 2sm:flex-[0_0_50%] 2lg:flex-[0_0_33.333333%] px-4 mb-4">
+                                        <Link to={`/anime/detail/${anime.endpoint}`} key={i} className="group">
+                                            <div className="anime-thumb h-[325px] rounded-md bg-no-repeat bg-cover bg-top transition-all duration-300" style={{ backgroundImage: `url(${anime.thumb})`}}></div>
+                                        </Link>
+                                        
+                                        <div className="pt-5">
+                                            <ul>
+                                                {   anime.genres.map( (genre, i) => (
+                                                    <li className="inline-block text-white text-[10px] bg-white bg-opacity-20 py-1 px-3 rounded-xl mt-1 ml-1 font-bold">
+                                                        <Link to={`/anime/genre/${genre.url}`}>{ genre.title }</Link>
+                                                    </li>
+                                                    ))
+                                                }
+                                                
+                                            </ul>
+                                        </div>
+                                        
+                                        <h5 className="text-white mt-3">{ anime.title }</h5>
+                                    </div>
                                 ) )
                             }
                             
@@ -40,13 +56,27 @@ const Anime = () => {
                             isLoading ?
                             <div className="text-4xl text-white">LOADING..........</div>
                             :
-                            animePopular.map( (anime, i) => (
-                                <Link to={`/anime/detail/${anime.endpoint}`} key={i} className="flex-[0_0_100%] 2sm:flex-[0_0_50%] 2lg:flex-[0_0_33.333333%] px-4 mb-4 group">
-                                    <div className="h-[200px] flex rounded-md bg-no-repeat bg-cover bg-top transition-all duration-300 justify-center items-end" style={{ backgroundImage: `url(${anime.thumb})`}}>
+                            animePopular.map( (anime, i) => {
+                                return i % 2 === 0 ? (
+                                <Link to={`/anime/detail/${anime.endpoint}`} key={i} className="flex-[0_0_100%] 2sm:flex-[0_0_50%] 2lg:flex-[0_0_33.333333%] px-4 mb-4 overflow-hidden transition-all duration-500 group">
+                                    
+                                        <div className={`h-[200px] flex rounded-md bg-no-repeat bg-cover bg-top justify-center items-end group-hover:scale-75 group-hover:-rotate-12 transition-all duration-500`} style={{ backgroundImage: `url(${anime.thumb})`}}>
+                                        :
+                                    
                                         <h5 className="text-white text-2xl font-semibold p-4">{ anime.title }</h5>
                                     </div>
                                 </Link>
-                            ) )
+                                ) : (
+                                    <Link to={`/anime/detail/${anime.endpoint}`} key={i} className="flex-[0_0_100%] 2sm:flex-[0_0_50%] 2lg:flex-[0_0_33.333333%] px-4 mb-4 overflow-hidden transition-all duration-500 group">
+                                    i % 2 == 0 ?
+                                        <div className={`h-[200px] flex rounded-md bg-no-repeat bg-cover bg-top justify-center items-end group-hover:scale-75 group-hover:rotate-12 transition-all duration-500`} style={{ backgroundImage: `url(${anime.thumb})`}}>
+                                        :
+                                    
+                                        <h5 className="text-white text-2xl font-semibold p-4">{ anime.title }</h5>
+                                    </div>
+                                </Link>
+                                )
+                            }   )
                         }
                     </div>
                 </div>
