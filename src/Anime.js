@@ -1,21 +1,43 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import anime from './apis/anime'
 
 const Anime = () => {
+    const {page} = useParams()
+    const navigate = useNavigate();
+    const oldUrl = "/anime/";
+    let url = page ? oldUrl+'/page/' +page : oldUrl;
+
     const [isLoading, setIsLoading] = useState(true)
     const [animeLatest, setAnimeLatest] = useState([])
     const [animePopular, setAnimePopular] = useState([])
-    const getAnime = async () => {
-        const response = await anime.get("/anime");
-        console.log(response.data.latest.data)
+    const [next, setNext] = useState("");
+    const [prev, setPrev] = useState("");
+    const getAnime = async (link = url) => {
+        const response = await anime.get(link);
         setAnimeLatest(response.data.latest.data);
         setAnimePopular(response.data.popular.data);
+        setNext(response.data.latest.next);
+        setPrev(response.data.latest.prev);
         setIsLoading(false)
     }
     useEffect( () => {
+        window.scrollTo(0, 0);
         getAnime()
-    }, [])
+    }, [page])
+
+    const btnNext = (page) => {
+        setIsLoading(true);
+        navigate(`/anime/page/${page}`)
+    }
+
+    const btnPrev = (page) => {
+        setIsLoading(true);
+        console.log(page);
+        let url = page == 1 ? '/anime' :  `/anime/page/${page}`
+        navigate(url)
+    }
+
     return (
         <div className="pt-24 pb-7">
             <div className="sm:container px-4 mx-auto">
@@ -80,7 +102,20 @@ const Anime = () => {
                         }
                     </div>
                 </div>
-                
+                {
+                    isLoading ?
+                    ""
+                    :
+                    <div>
+                        {
+                            prev === "" ?
+                            "":
+                            <button onClick={() => btnPrev(`${prev}`)} className="text-white bg-sky-700 px-5 py-2 rounded-md mr-2 hover:bg-sky-800">Prev</button>
+                        }
+                        <button onClick={() => btnNext(`${next}`)} to={`/anime/page/${next}`} className="text-white bg-sky-700 px-5 py-2 rounded-md hover:bg-sky-800">Next</button>
+
+                    </div>
+                }
             </div>
         </div>
     )
