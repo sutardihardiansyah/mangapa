@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import anime from "./apis/anime";
 
 const Manga = () => {
   const { page } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const oldUrl = "http://localhost:5000/manga";
+  const oldUrl = "/manga/";
   let url = page ? oldUrl + "/page/" + page : oldUrl;
   const [next, setNext] = useState("");
   const [prev, setPrev] = useState("");
   const [mangaList, setMangaList] = useState([]);
 
   const getData = async (link = url) => {
-    const response = await axios.get(link);
+    const response = await anime.get(link);
     setMangaList(response.data.manga_list);
     setNext(response.data.next);
     setPrev(response.data.prev);
@@ -33,21 +33,16 @@ const Manga = () => {
   const btnPrev = (page) => {
     setIsLoading(true);
     console.log(page);
-    let url = page == 1 ? "/" : `/manga/page/${page}`;
+    let url = page === 1 ? "/" : `/manga/page/${page}`;
     navigate(url);
   };
-  const searchData = async (e) => {
-    const res = await axios.get(`http://localhost:5000/manga/search/${e}`);
-    console.log(res);
-  };
+  // const searchData = async (e) => {
+  //   const res = await anime.get(`manga/search/${e}`);
+  //   console.log(res);
+  // };
   return (
     <div className="pt-24 pb-7">
       <div className="container px-4 mx-auto">
-        <input
-          type="text"
-          placeholder="seacrh"
-          onChange={(e) => searchData(e.target.value)}
-        />
         <div className="grid grid-cols-12 mb-10">
           <div className="col-span-8">
             <div className="grid grid-cols-1 2sm:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-4 2sm:gap-x-36 gap-y-24 sm:gap-x-52 md:gap-y-44 lg:gap-y-20">
