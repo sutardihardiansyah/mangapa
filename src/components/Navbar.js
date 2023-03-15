@@ -63,7 +63,7 @@ const Navbar = () => {
         isNavbarActive ? "navbar-active" : ""
       }`}
     >
-      <div className="container">
+      <div className="xs:w-full lg:container">
         <div className="flex items-center justify-between relative">
           <div className="px-4">
             <p className="py-6 font-bold text-blue-400 block text-lg">
